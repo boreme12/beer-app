@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import View from './components/View';
+import Edit from './components/Edit';
+import Add from './components/Add';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface IMyComponentState {
+  page: string,
+  id: number,
 }
+export default class App extends Component<any, any> {
+  constructor(props: any){
+    super(props);
+    this.state = {
+      page: 'view',
+      id: 0,
+    }
+  }
 
-export default App;
+  onPageChange = (page: string): void => {
+    this.setState({
+      page,
+    });
+  }
+
+  onPageChangeEdit = (page: string, id: number): void => {
+    this.setState({
+      page,
+      id,
+    });
+  }
+
+  render() {
+    const { page } = this.state;
+    if(page === 'view') {
+      return <View onPageChangeEdit={this.onPageChangeEdit} onPageChange={this.onPageChange}/>
+    } else if (page === 'edit'){
+      return <Edit id={this.state.id} onPageChange={this.onPageChange}/>
+    }
+    return <Add onPageChange={this.onPageChange}/>
+    
+  }
+}
